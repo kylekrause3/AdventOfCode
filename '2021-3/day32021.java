@@ -9,7 +9,7 @@ public class day32021 {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		try {
-			File in = new File("C:\\Users\\megae\\eclipse-workspace\\Advent-Of-Code\\2021-3\\TestInput2021-3");
+			File in = new File("../AdventOfCode/'2021-3/Input2021-3");
 			Scanner scan = new Scanner(in);
 			
 			ArrayList<String> bytes= new ArrayList<String>(); //needs to be string or else 00100 would just be 100
@@ -24,7 +24,7 @@ public class day32021 {
 			/*	THIS PART IS THE PROBLEM */
 			
 			//rating(reduce(bytes, 0, true), reduce(bytes, 0, false));
-			rating(reduce(bytes, 0, false), reduce(bytes, 0, true));
+			rating(reduce(bytes, 0, true), reduce(bytes, 0, false));
 			
 			/* END OF PROBLEM */
 			
@@ -68,6 +68,8 @@ public class day32021 {
 	}
 	
 	private static String reduce(ArrayList<String> bytes, int bit, boolean rating) {
+		bytes = new ArrayList<String>(bytes); //need this so we don't mutate the original alist
+		
 		if(bytes.size() == 1) return bytes.get(0);
 		
 		int[] occ = new int[2];

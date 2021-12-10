@@ -9,7 +9,7 @@ public class day32020 {
 	
 	public static void main(String[] args) {
 		try {
-			File in = new File("../AdventOfCode/2020-3/Input2020-3");
+			File in = new File("../AdventOfCode/&2020-3/Input2020-3");
 			Scanner scan = new Scanner(in);
 			
 			ArrayList<String> slope = new ArrayList<String>();

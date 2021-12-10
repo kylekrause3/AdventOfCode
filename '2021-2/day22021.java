@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class day2 {
+public class day22021 {
 
     public static void main(String[] args) {
         // TODO Auto-generated method stub
@@ -13,7 +13,7 @@ public class day2 {
             String[] split = new String[2];
             int[] position = new int[] {0, 0};
             int aim = 0;
-            File data = new File("C:\\Users\\megae\\eclipse-workspace\\Advent-Of-Code\\2021-2\\Input2021-2");
+            File data = new File("../AdventOfCode/'2021-2/Input2021-2");
             Scanner scan = new Scanner(data);
             
             while(scan.hasNextLine()) {

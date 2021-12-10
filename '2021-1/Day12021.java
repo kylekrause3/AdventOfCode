@@ -14,7 +14,7 @@ public class Day12021{
 		int current = 0;
 		int counter = 0;
 		try {
-			File input = new File("C:\\Users\\Kyle Krause\\eclipse-workspace\\AdventOfCode\\2021-1.1\\Input");
+			File input = new File("../AdventOfCode/'2021-1/Input");
 			Scanner scan = new Scanner(input);
 			while(scan.hasNextLine()) {
 				alist.add(scan.nextInt());
