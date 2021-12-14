@@ -8,7 +8,7 @@ public class day42021 {
 
 	public static void main(String[] args) {
 	    try{
-	      File input = new File("../AdventOfCode/'2021-4/Input2021-4");
+	      File input = new File("../AdventOfCode/'2021-4/TestInput2021-4");
 	      Scanner scan = new Scanner(input);
 
 	      String stuff = "";
