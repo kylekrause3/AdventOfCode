@@ -8,26 +8,22 @@ public class day42021 {
 
 	public static void main(String[] args) {
 	    try{
-	      File input = new File("../AdventOfCode/'2021-4/TestInput2021-4");
+	      File input = new File("../AdventOfCode/'2021-4/Input2021-4");
 	      Scanner scan = new Scanner(input);
 
 	      String stuff = "";
 	      
 	      String nxtln;
 	      
-	      /*while(scan.hasNextLine()) {
-	    	  stuff += scan.nextLine();
-	      }*/
 	      while(scan.hasNextLine()) {
 	    	  nxtln = scan.nextLine();
 	    	  if(nxtln.equals("")) stuff += "KYLE KRAUSE";
-	    	  else stuff += nxtln;
+	    	  else stuff += nxtln + "delete this";
 	      }
 	      System.out.println("done scanning" + stuff);
 	      scan.close(); 
 
 	      String[] nums = stuff.split("KYLE KRAUSE");
-	      //for (String i : nums) System.out.print(i + "(next String)");
 	      playbingo(nums);
 
 	    } catch(FileNotFoundException e){
@@ -37,13 +33,27 @@ public class day42021 {
 
 	  public static void playbingo(String[] nums){
 		  System.out.println("playing bingo");
-		  String[] pickstr = nums[0].split(",");
-		  //for (String i : nums) System.out.print(i + "(next String)");
-		  System.out.println();
-		  int points;
-		  ArrayList<ArrayList<String>>  boards = new ArrayList<ArrayList<String>>();
+		  int points = 0;
+		  //boolean inside; //for winning numbers, so we don't end up checking boards when they're full
 
-		  for(int i = 1; i < nums.length; i++) boards.add(new ArrayList<String>(Arrays.asList(nums[i].split(" "))));
+      /***** NUMBERS TO PLAY BINGO WITH *****/
+      nums[0].replaceAll("delete this", "");
+		  String[] pickstr = nums[0].split(",");
+
+      /***** BINGO BOARDS *****/
+		  ArrayList<ArrayList<String>> boards = new ArrayList<ArrayList<String>>();
+
+      ArrayList<String> nonew = new ArrayList<String>();
+      for(int i = 1; i < nums.length; i++){
+        nonew.add(nums[i].replaceAll("delete this", " "));
+      }
+      
+      String[] nospace = new String[nonew.size()];
+      for(int i = 0; i < nonew.size(); i++) nospace[i] = nonew.get(i);
+		  for(int i = 0; i < nospace.length; i++) {
+        boards.add(new ArrayList<String>(Arrays.asList(nospace[i].split(" "))));
+      }
+
 		  for(int i = 0; i < boards.size(); i++) {
 			  for(int j = 0; j < boards.get(i).size();) {
 				  if(boards.get(i).get(j).equals("")) {
@@ -52,20 +62,50 @@ public class day42021 {
 				  else j++;
 			  }
 		  }
-		  ArrayList<ArrayList<String>>  cachedboards = new ArrayList<ArrayList<String>>(boards);
+
+      /***** CACHE BOARDS(for points) *****/
+		  ArrayList<ArrayList<String>> cachedboards = new ArrayList<ArrayList<String>>();
+		  //this part so that cachedboards isn't a reference to boards at all, so it doesn't change with it
+		  for(int i = 0; i < boards.size(); i++) {
+			  cachedboards.add(new ArrayList<String>());
+			  for(int j = 0; j < boards.get(i).size(); j++) {
+				  cachedboards.get(i).add(boards.get(i).get(j));
+			  }
+		  }
+		  
+      /***** GOING THROUGH LIST OF NUMBERS TO PICK, FINDING FIRST WINNER *****/
+		  boolean[] haswon = new boolean[boards.size()];
+		  for(int i = 0; i < haswon.length; i++) {
+			  haswon[i] = false;
+		  }
 		  
 		  for(int i = 0; i < pickstr.length; i++){
 			  for(int j = 0; j < boards.size(); j++) {
-				  points = checkboard(boards.get(j), cachedboards.get(j), pickstr[i]);
-				  if(points != 0) System.out.println(points);
+				  if(!haswon[j]) {
+					  points = checkboard(boards.get(j), cachedboards.get(j), pickstr[i]);
+					  if(points != 0) {
+						  System.out.println(points);
+						  haswon[j] = true;
+						  //break;
+				  	}
+				  }
 			  }
+			 //if(points != 0) break; 
 		  }
+		  
+		  
+		/***** END OF METHOD *****/
 	  }
 
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 	  public static int checkboard(ArrayList<String> board, ArrayList<String> cboard, String numstr){
-		  //System.out.println("Checking board");
-		  ArrayList<String> winner = new ArrayList<String>();
-	    
+		  //go through the board and add an x where the picked number is
 		  boolean addedone = false;
 		  for(int i = 0; i < board.size(); i++){
 			  if(board.get(i).equals(numstr)){
@@ -74,15 +114,35 @@ public class day42021 {
 				  break;
 	      		}
 		  }
-	    
+		  
+		  
+		  //if we added an x
+		  ArrayList<String> winner = new ArrayList<String>();
 		  int ret = 0;
-	    
+		  boolean inside = false;
+
+		  
 		  if(addedone){
 			  winner = checkrowsandcols(board, cboard);
 			  if(!winner.get(0).equals("a")) {
-				  //System.out.println(winner);
-				  for(int i = 0; i < winner.size(); i++) ret+=Integer.parseInt(winner.get(i));
-				  ret *= Integer.parseInt(numstr);
+				  for(int i = 0; i < winner.size(); i++) {
+					  if(winner.get(i).equals(numstr)) {
+						  inside = true;
+						  break;
+					  }
+				  }
+				  //inside = true;
+				  
+				  if(inside) {
+					  System.out.println(winner + " winning number: " + numstr);
+					  for(int i = 0; i < board.size(); i++) {
+						  if(!board.get(i).equals("x")) ret += Integer.parseInt(board.get(i));
+					  }
+					  System.out.println(ret + "*" + numstr);
+					  ret *= Integer.parseInt(numstr);
+					  inside = false;
+				  }
+				  else ret = 0;
 			  }
 		  }
 	    
@@ -98,27 +158,30 @@ public class day42021 {
 		  ArrayList<String> row = new ArrayList<String>();
 
 		  for(int i = 0; i < board.size(); i++){
+			  //if we have an x, check this row and this column
 			  if(board.get(i).equals("x")) {
-				  // to get column do i % 5
-				  // to get row do (i * 2) / 10 
+				  //adding all of the numbers in each column
 				  columnind = i % 5;
-				  rowind = (int)((i * 2) / 10);
+				  rowind = 5 * (int)((i * 2) / 10);
 				  for(int j = 0; j < 5; j++){
-					  col.add(board.get(columnind * j));
+					  col.add(board.get(columnind + (5 * j)));
 					  row.add(board.get(rowind + j));
 				  }
-				  System.out.println(col + " " +  row);
+				  
+				  //checking if everything is the same in the given columns/rows
 				  colfull = isAllSame(col);
 				  rowfull = isAllSame(row);
+				  
+				  //if so, return the numbers of the full column
 				  if(colfull) {
-					  col.clear();
+					  col = new ArrayList<String>();
 					  for(int j = 0; j < 5; j++) {
-						  col.add(cboard.get(columnind * j));
+						  col.add(cboard.get(columnind + (5 * j)));
 					  }
 					  return col;
 				  }
 				  else if(rowfull) {
-					  row.clear();
+					  row = new ArrayList<String>();
 					  for(int j = 0; j < 5; j++) {
 						  row.add(cboard.get(rowind + j));
 					  }
@@ -126,9 +189,10 @@ public class day42021 {
 				  }
 
 			  }
-			  col.clear();
-			  row.clear();
+			  col = new ArrayList<String>();
+			  row = new ArrayList<String>();
 		  }
+		  //if no winner, give dummy alist
 		  ArrayList<String> ret = new ArrayList<String>();
 		  ret.add("a");
 		  return ret;
