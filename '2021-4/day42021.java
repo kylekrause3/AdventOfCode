@@ -31,11 +31,18 @@ public class day42021 {
 	    }
 	  }
 
+	
+	
+	
+	
+	
 	  public static void playbingo(String[] nums){
 		  System.out.println("playing bingo");
 		  int points = 0;
 		  //boolean inside; //for winning numbers, so we don't end up checking boards when they're full
 
+		  
+		  
       /***** NUMBERS TO PLAY BINGO WITH *****/
       nums[0].replaceAll("delete this", "");
 		  String[] pickstr = nums[0].split(",");
@@ -73,7 +80,7 @@ public class day42021 {
 			  }
 		  }
 		  
-      /***** GOING THROUGH LIST OF NUMBERS TO PICK, FINDING FIRST WINNER *****/
+      /***** GOING THROUGH LIST OF NUMBERS TO PICK, FINDING WINNER *****/
 		  boolean[] haswon = new boolean[boards.size()];
 		  for(int i = 0; i < haswon.length; i++) {
 			  haswon[i] = false;
@@ -96,10 +103,6 @@ public class day42021 {
 		  
 		/***** END OF METHOD *****/
 	  }
-
-	  
-	  
-	  
 	  
 	  
 	  
